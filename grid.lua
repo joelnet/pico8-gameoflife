@@ -7,13 +7,7 @@ grid = {
   init = function()
     for i=1, grid.rows * grid.cols do
       grid.data[i] = 0
-    end
-
-    for row=1, grid.rows do
-      grid.neighbors[row] = {}
-      for col=1, grid.cols do
-        grid.neighbors[row][col] = 0
-      end
+      grid.neighbors[i] = 0
     end
   end,
 
@@ -25,16 +19,36 @@ grid = {
 
     grid.data[i] = nextLive
 
-    if (row > 1 and col > 1) then grid.neighbors[row - 1][col - 1] += adjustment end
-    if (row > 1) then grid.neighbors[row - 1][col] += adjustment end
-    if (row > 1 and col < grid.cols) then grid.neighbors[row - 1][col + 1] += adjustment end
+    if (row > 1 and col > 1) then grid.neighbors[i - 128 - 1] += adjustment end
+    if (row > 1) then grid.neighbors[i - 128] += adjustment end
+    if (row > 1 and col < grid.cols) then grid.neighbors[i - 128 + 1] += adjustment end
 
-    if (col > 1) then grid.neighbors[row][col - 1] += adjustment end
-    if (col < grid.cols) then grid.neighbors[row][col + 1] += adjustment end
+    if (col > 1) then grid.neighbors[i - 1] += adjustment end
+    if (col < grid.cols) then grid.neighbors[i + 1] += adjustment end
 
-    if (row < grid.rows and col > 1) then grid.neighbors[row + 1][col - 1] += adjustment end
-    if (row < grid.rows) then grid.neighbors[row + 1][col] += adjustment end
-    if (row < grid.rows and col < grid.cols) then grid.neighbors[row + 1][col + 1] += adjustment end
+    if (row < grid.rows and col > 1) then grid.neighbors[i + 128 - 1] += adjustment end
+    if (row < grid.rows) then grid.neighbors[i + 128] += adjustment end
+    if (row < grid.rows and col < grid.cols) then grid.neighbors[i + 128 + 1] += adjustment end
+  end,
+
+    toggle = function(row, col)
+    local i = ((row - 1) * grid.rows) + col
+    local live = grid.data[i]
+    local nextLive = live == 1 and 0 or 1
+    local adjustment = nextLive == 1 and 1 or -1
+
+    grid.data[i] = nextLive
+
+    if (row > 1 and col > 1) then grid.neighbors[i - 128 - 1] += adjustment end
+    if (row > 1) then grid.neighbors[i - 128] += adjustment end
+    if (row > 1 and col < grid.cols) then grid.neighbors[i - 128 + 1] += adjustment end
+
+    if (col > 1) then grid.neighbors[i - 1] += adjustment end
+    if (col < grid.cols) then grid.neighbors[i + 1] += adjustment end
+
+    if (row < grid.rows and col > 1) then grid.neighbors[i + 128 - 1] += adjustment end
+    if (row < grid.rows) then grid.neighbors[i + 128] += adjustment end
+    if (row < grid.rows and col < grid.cols) then grid.neighbors[i + 128 + 1] += adjustment end
   end,
 
   draw = function()
@@ -66,7 +80,7 @@ grid = {
       local i1 = ((row - 1) * grid.rows)
       for col=1, grid.cols do
         local i = i1 + col
-        local neighbors = grid.neighbors[row][col]
+        local neighbors = grid.neighbors[i]
         local rule = grid.rules(grid.data[i], neighbors)
         if (grid.data[i] ~= rule) then
           updates[#updates+1] = {row = row, col = col}
