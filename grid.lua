@@ -1,12 +1,14 @@
 grid = {
+  rows = 128,
+  cols = 128,
   data = {},
   neighbors = {},
 
   init = function()
-    for row=1, 128 do
+    for row=1, grid.rows do
       grid.data[row] = {}
       grid.neighbors[row] = {}
-      for col=1, 128 do
+      for col=1, grid.cols do
         grid.data[row][col] = 0
         grid.neighbors[row][col] = 0
       end
@@ -22,19 +24,19 @@ grid = {
 
     if (row > 1 and col > 1) then grid.neighbors[row - 1][col - 1] += adjustment end
     if (row > 1) then grid.neighbors[row - 1][col] += adjustment end
-    if (row > 1 and col < 128) then grid.neighbors[row - 1][col + 1] += adjustment end
+    if (row > 1 and col < grid.cols) then grid.neighbors[row - 1][col + 1] += adjustment end
 
     if (col > 1) then grid.neighbors[row][col - 1] += adjustment end
-    if (col < 128) then grid.neighbors[row][col + 1] += adjustment end
+    if (col < grid.cols) then grid.neighbors[row][col + 1] += adjustment end
 
-    if (row < 128 and col > 1) then grid.neighbors[row + 1][col - 1] += adjustment end
-    if (row < 128) then grid.neighbors[row + 1][col] += adjustment end
-    if (row < 128 and col < 128) then grid.neighbors[row + 1][col + 1] += adjustment end
+    if (row < grid.rows and col > 1) then grid.neighbors[row + 1][col - 1] += adjustment end
+    if (row < grid.rows) then grid.neighbors[row + 1][col] += adjustment end
+    if (row < grid.rows and col < grid.cols) then grid.neighbors[row + 1][col + 1] += adjustment end
   end,
 
   draw = function()
-    for row=1, 128 do
-      for col=1, 128 do
+    for row=1, grid.rows do
+      for col=1, grid.cols do
         local color = grid.data[row][col] == 1 and 7 or 0
         if (color == 7) then
           pset(col, row, color)
@@ -55,8 +57,8 @@ grid = {
   run = function()
     local updates = {}
 
-    for row=1, 128 do
-      for col=1, 128 do
+    for row=1, grid.rows do
+      for col=1, grid.cols do
         local neighbors = grid.neighbors[row][col]
         local rule = grid.rules(grid.data[row][col], neighbors)
         if (grid.data[row][col] ~= rule) then
