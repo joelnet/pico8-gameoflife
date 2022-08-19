@@ -5,22 +5,25 @@ grid = {
   neighbors = {},
 
   init = function()
+    for i=1, grid.rows * grid.cols do
+      grid.data[i] = 0
+    end
+
     for row=1, grid.rows do
-      grid.data[row] = {}
       grid.neighbors[row] = {}
       for col=1, grid.cols do
-        grid.data[row][col] = 0
         grid.neighbors[row][col] = 0
       end
     end
   end,
 
   toggle = function(row, col)
-    local live = grid.data[row][col]
+    local i = ((row - 1) * grid.rows) + col
+    local live = grid.data[i]
     local nextLive = live == 1 and 0 or 1
     local adjustment = nextLive == 1 and 1 or -1
 
-    grid.data[row][col] = nextLive
+    grid.data[i] = nextLive
 
     if (row > 1 and col > 1) then grid.neighbors[row - 1][col - 1] += adjustment end
     if (row > 1) then grid.neighbors[row - 1][col] += adjustment end
@@ -36,8 +39,10 @@ grid = {
 
   draw = function()
     for row=1, grid.rows do
+      local i1 = ((row - 1) * grid.rows)
       for col=1, grid.cols do
-        local color = grid.data[row][col] == 1 and 7 or 0
+        local i = i1 + col
+        local color = grid.data[i] == 1 and 7 or 0
         if (color == 7) then
           pset(col, row, color)
         end
@@ -58,10 +63,12 @@ grid = {
     local updates = {}
 
     for row=1, grid.rows do
+      local i1 = ((row - 1) * grid.rows)
       for col=1, grid.cols do
+        local i = i1 + col
         local neighbors = grid.neighbors[row][col]
-        local rule = grid.rules(grid.data[row][col], neighbors)
-        if (grid.data[row][col] ~= rule) then
+        local rule = grid.rules(grid.data[i], neighbors)
+        if (grid.data[i] ~= rule) then
           updates[#updates+1] = {row = row, col = col}
         end
       end
