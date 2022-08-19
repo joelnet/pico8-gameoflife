@@ -5,7 +5,7 @@ FILE_HTML=$DIR/life.html
 FILE_JS=$DIR/life.js
 FILE_PART=./html/_part.html
 FILE=`cat $FILE_PART`
-BUILD_HTML=./build/life.html
+BUILD_HTML=./docs/life.html
 DELIM='<!-- Add content below the cart here -->'
 
 if [ ! -d "$DIR" ]; then
@@ -18,11 +18,11 @@ if [ ! -f "$FILE_HTML" ]; then
   exit 1
 fi
 
-mkdir -p build/
-mv "$FILE_HTML" build/
-mv "$FILE_JS" build/
+mkdir -p docs/
+mv "$FILE_HTML" docs/
+mv "$FILE_JS" docs/
 
-# STRING=`cat build/life.html`
+# STRING=`cat docs/life.html`
 
 # node -p "fs=require('fs');fs.readFileSync('$BUILD_HTML', 'utf8').replace('$DELIM',fs.readFileSync('$FILE_PART', 'utf8'))" > build/life2.html
 # rm build/life.html
