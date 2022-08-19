@@ -1,17 +1,12 @@
 #!/bin/sh
 
-DIR=~/Library/Application\ Support/pico-8/carts
+DIR=$(pwd)
 FILE_HTML=$DIR/life.html
 FILE_JS=$DIR/life.js
 FILE_PART=./html/_part.html
 FILE=`cat $FILE_PART`
 BUILD_HTML=./docs/life.html
 DELIM='<!-- Add content below the cart here -->'
-
-if [ ! -d "$DIR" ]; then
-  echo "Directory $DIR expected to exist."
-  exit 1
-fi
 
 if [ ! -f "$FILE_HTML" ]; then
   echo "File $FILE_HTML expected to exist."
