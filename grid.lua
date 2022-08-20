@@ -1,6 +1,7 @@
 grid = {
-  rows = 128,
-  cols = 128,
+  rows = 64,
+  cols = 64,
+  scale = 2,
   color = 7,
   data = {},
   neighbors = {},
@@ -38,7 +39,11 @@ grid = {
       for col=1, grid.cols do
         local i = i1 + col
         if (grid.data[i] == 1) then
-          pset(col, row, grid.color)
+          local x0 = col*grid.scale
+          local y0 = row*grid.scale
+          local x1 = x0 + grid.scale - 1
+          local y1 = y0 + grid.scale - 1
+          rectfill(x0, y0, x1, y1, grid.color)
         end
       end
     end

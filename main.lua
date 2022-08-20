@@ -5,7 +5,8 @@ function _init()
     b = 0,
     btnx = 0,
     x = 0,
-    y = 0
+    y = 0,
+    draw = 0
   }
   mode = "welcome"
   t = 0
@@ -28,9 +29,13 @@ function _update()
   end
 
 
-  if (b == 1 and (last.b ~= b or last.x ~= x or last.y ~=y)) then
-    if (x > 0 and x <= 128 and y > 0 and y <= 128) then
-      grid.toggle(y, x)
+  if (b == 1) then
+    local flrx = flr(x/2)
+    local flry = flr(y/2)
+    if (last.b ~= b or flr(last.x/2) ~= flrx or flr(last.y/2) ~= flry) then
+      if (x > 0 and x <= 128 and y > 0 and y <= 128) then
+        grid.toggle(flry, flrx)
+      end
     end
   end
 
@@ -52,7 +57,7 @@ function _draw()
     _draw_draw()
   end
 
-  spr(0,x,y)
+  spr(0, flr((x) / 2) * 2 - 1, flr((y) / 2) * 2 - 1) 
 end
 
 function _draw_welcome()
@@ -61,7 +66,10 @@ function _draw_welcome()
 end
 
 function _draw_play()
-  grid.run()
+  if (last.draw + 2 < t) then
+    last.draw = t
+    grid.run()
+  end
   grid.draw()
 end
 
