@@ -33,8 +33,8 @@ function _update()
     local flrx = flr(x/2)
     local flry = flr(y/2)
     if (last.b ~= b or flr(last.x/2) ~= flrx or flr(last.y/2) ~= flry) then
-      if (x > 0 and x <= 128 and y > 0 and y <= 128) then
-        grid.toggle(flry, flrx)
+      if (x > 0 and x < 128 and y > 0 and y < 128) then
+        grid.toggle(flry + 1, flrx + 1)
       end
     end
   end
@@ -57,7 +57,7 @@ function _draw()
     _draw_draw()
   end
 
-  spr(0, flr((x) / 2) * 2 - 1, flr((y) / 2) * 2 - 1) 
+  spr(0, flr((x) / 2) * 2 + 2, flr((y) / 2) * 2 + 2)
 end
 
 function _draw_welcome()
