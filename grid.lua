@@ -13,10 +13,11 @@ grid = {
     end
   end,
 
-  toggle = function(row, col)
+  toggle = function(row, col, on)
     local i = ((row - 1) * grid.rows) + col
     local live = grid.data[i]
     local nextLive = live == 1 and 0 or 1
+    if (on ~= nil) then nextLive = on and 1 or 0 end
     local adjustment = nextLive == 1 and 1 or -1
 
     grid.data[i] = nextLive
